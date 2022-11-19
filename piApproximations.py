@@ -10,6 +10,7 @@ sns.axes_style()
 sns.set_style("darkgrid", {"axes.facecolor": ".9"})
 n = 15
 
+
 def leibniz(n):
     output = np.zeros(n)
     cache = 0
@@ -69,13 +70,11 @@ def chudnovsky(n):
     k = 0
     while k < n:
         value = pow(-1, k) * np.math.factorial(6 * k) * (13591409 + 545140134 * k) / (
-                    pow(np.math.factorial(k), 3) * pow(np.math.factorial(k), 3) * pow(640320, 3 * k + 3 / 2))
+                pow(np.math.factorial(k), 3) * pow(np.math.factorial(k), 3) * pow(640320, 3 * k + 3 / 2))
         cache = value + cache
         output[k] = cache
         k += 1
     return 1 / (output * 12)
-
-
 
 
 x = np.arange(0, n, 1)
@@ -88,13 +87,13 @@ df5 = pd.DataFrame({'x': x, 'y': leibniz(n)})
 
 y1 = madhava(n)
 y2 = chudnovsky(n)
-g_results1 = sns.lineplot(data=df1, x='x', y='y', color="red")
-g_results2 = sns.lineplot(data=df2, x='x', y='y')
-g_results3 = sns.lineplot(data=df3, x='x', y='y')
-g_results4 = sns.lineplot(data=df4, x='x', y='y')
-g_results5 = sns.lineplot(data=df5, x='x', y='y')
+g_results1 = sns.lineplot(data=df1, x='x', y='y', label="Chudnovsky")
+g_results2 = sns.lineplot(data=df2, x='x', y='y', label="Ramanujan")
+g_results3 = sns.lineplot(data=df3, x='x', y='y', label="Newton")
+g_results4 = sns.lineplot(data=df4, x='x', y='y', label="Madhava")
+g_results5 = sns.lineplot(data=df5, x='x', y='y', label="Leibniz")
 
-#g_results.set(xscale='log')
+# g_results.set(xscale='log')
 
 sns.despine()
 
