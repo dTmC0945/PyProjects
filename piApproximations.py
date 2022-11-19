@@ -87,13 +87,11 @@ df5 = pd.DataFrame({'x': x, 'y': leibniz(n)})
 
 y1 = madhava(n)
 y2 = chudnovsky(n)
-g_results1 = sns.lineplot(data=df1, x='x', y='y', label="Chudnovsky")
+g_results1 = sns.lineplot(data=df1, x='x', y='y', label="Chudnovsky", markers=['o'])
 g_results2 = sns.lineplot(data=df2, x='x', y='y', label="Ramanujan")
 g_results3 = sns.lineplot(data=df3, x='x', y='y', label="Newton")
 g_results4 = sns.lineplot(data=df4, x='x', y='y', label="Madhava")
-g_results5 = sns.lineplot(data=df5, x='x', y='y', label="Leibniz")
-
-# g_results.set(xscale='log')
+g_results5 = sns.lineplot(data=df5, x='x', y='y', label="Leibniz", markers=['o'])
 
 sns.despine()
 
