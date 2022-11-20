@@ -1,88 +1,70 @@
-import numpy as np
-from mpmath import mp
-from matplotlib import pyplot as plt
-import seaborn
+import numpy as np  # needed for array and trigo functions
+from mpmath import mp  # needed to get the digits of pi
+from matplotlib import pyplot as plt  # to plot stuff
 
 
-def VectorPlot(Array):
-    x_main = 0
-    y_main = 0
+def VectorPlot(array):
+    plot_array = np.zeros((len(array), 4))
 
-    PlotArray = np.zeros((len(Array), 4))
-
-    for i in range(len(Array)):
-        x = Array[i][0]
-        y = Array[i][1]
-        x_main = x_main + x
-        y_main = y_main + y
-
-    x_main = abs(x_main)
-    y_main = abs(y_main)
-
-    for i in range(len(Array) - 1):
-        PlotArray[i][2] = Array[i + 1][0]
-        PlotArray[i][3] = Array[i + 1][1]
+    for i in range(len(array) - 1):
+        plot_array[i][2] = array[i + 1][0]
+        plot_array[i][3] = array[i + 1][1]
 
         x_sub_main = 0
         y_sub_main = 0
 
         j = 0
         while j <= i + 1:
-            x = Array[j][0]
-            y = Array[j][1]
+            x = array[j][0]
+            y = array[j][1]
             x_sub_main = x_sub_main + x
             y_sub_main = y_sub_main + y
             j += 1
-        PlotArray[i + 1][0] = x_sub_main
-        PlotArray[i + 1][1] = y_sub_main
+        plot_array[i + 1][0] = x_sub_main
+        plot_array[i + 1][1] = y_sub_main
 
-    PlotArray[-1] = [0, 0, 0, 0]
+    plot_array[-1] = [0, 0, 0, 0]
 
-    X, Y, U, V = zip(*PlotArray)
-    x = np.linspace(0.2, 10, 100)
-    seaborn.set(style='ticks')
+    x, y, u, v = zip(*plot_array)
+    plt.style.use('dark_background')
 
     plt.figure()
-    plt.ylabel("Imaginary - Axis")
-    plt.xlabel("Real - Axis")
-    plt.plot(0, 0, 'ok')  # <-- plot a black point at the origin
+    plt.plot(0, 0, 'ow')  # plot a white point at the origin
     ax = plt.gca()
-    ax.quiver(X, Y, U, V, angles='xy', scale_units='xy', color=['r', 'b', 'g'], scale=1)
+    ax.quiver(x, y, u, v, scale_units='xy', color=["r", "b", "g", "c", "m", "y", "w"], scale=1)
 
-    ax.spines['left'].set_position('zero')
+    ax.spines['left'].set_color('none')
     ax.spines['right'].set_color('none')
-    ax.spines['bottom'].set_position('zero')
+    ax.spines['bottom'].set_color('none')
     ax.spines['top'].set_color('none')
     ax.set_aspect('equal')
-    ax.grid(True, which='both')
-    plt.axvline(0)
-    plt.axhline(0)
-    seaborn.despine(ax=ax, offset=0)  # the important part here
+    ax.grid(False, which='both')
     plt.draw()
     plt.show()
 
-mp.dps = 1000
-digits = 1000
-value = mp.nstr((mp.mpf(mp.pi)), digits)
 
-print(value)
-my_list = []
+digits = 10000  # number of digits to be plotted
+mp.dps = digits  # sets the precision to the mpmath function
 
+value = mp.nstr((mp.mpf(mp.pi)), digits)  # gets the pi value and converts into string.
 
+my_list = []  # generate an empty array
 
-for x in str(value):
-    my_list.append(str(x))
+# convert all the string to individual string values. Including . which we need to remove.
+for ii in str(value):
+    my_list.append(str(ii))
 
-my_list.remove('.')
+my_list.remove('.')  # removes the annoying .
 
-data = list(map(int, my_list))
+data = list(map(int, my_list))  # converts the string values to integer values. The final hurdle
 
-Array = np.zeros((digits + 1, 2))
+Array = np.zeros((digits + 1, 2))  # generate a zero array for the vector plot
 
+# convert the bits into a vector plot.
 k = 1
 for n in data:
     Array[k] = [5 * np.cos(2 * np.pi / 10 * n), 5 * np.sin(2 * np.pi / 10 * n)]
     k += 1
 
-
+# Finally plotting
 VectorPlot(Array)
