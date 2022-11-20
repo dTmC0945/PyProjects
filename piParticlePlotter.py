@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import seaborn
 
 
-def PhasorPlot(Array):
+def VectorPlot(Array):
     x_main = 0
     y_main = 0
 
@@ -48,8 +48,7 @@ def PhasorPlot(Array):
     plt.plot(0, 0, 'ok')  # <-- plot a black point at the origin
     ax = plt.gca()
     ax.quiver(X, Y, U, V, angles='xy', scale_units='xy', color=['r', 'b', 'g'], scale=1)
-    ax.set_xlim([- x_main - 5, x_main + 5])
-    ax.set_ylim([- y_main - 5, y_main + 5])
+
     ax.spines['left'].set_position('zero')
     ax.spines['right'].set_color('none')
     ax.spines['bottom'].set_position('zero')
@@ -62,13 +61,14 @@ def PhasorPlot(Array):
     plt.draw()
     plt.show()
 
-
-digits = 10
-
+mp.dps = 1000
+digits = 1000
 value = mp.nstr((mp.mpf(mp.pi)), digits)
 
 print(value)
 my_list = []
+
+
 
 for x in str(value):
     my_list.append(str(x))
@@ -77,14 +77,12 @@ my_list.remove('.')
 
 data = list(map(int, my_list))
 
-Array = np.zeros((digits, 2))
+Array = np.zeros((digits + 1, 2))
 
-k = 0
+k = 1
 for n in data:
-    print(n)
-    Array[k] = [5 * np.sin(2 * np.pi / 10 * n), 5 * np.cos(2 * np.pi / 10 * n)]
+    Array[k] = [5 * np.cos(2 * np.pi / 10 * n), 5 * np.sin(2 * np.pi / 10 * n)]
     k += 1
 
-print(Array)
 
-PhasorPlot(Array)
+VectorPlot(Array)
