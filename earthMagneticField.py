@@ -50,5 +50,6 @@ ax.set_xlim(-xmax, xmax)
 ax.set_ylim(-ymax, ymax)
 ax.set_aspect('equal')
 plt.style.use('dark_background')
+plt.plot([0, 0], [-100, 100], 'w--', lw=0.3) # origin line
 
 plt.show()
