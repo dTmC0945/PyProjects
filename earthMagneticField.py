@@ -39,7 +39,7 @@ ax.streamplot(x, y, Bx, By, color=color, linewidth=0.5, cmap=plt.cm.hot,
               density=2, arrowstyle='->', arrowsize=0.5)
 
 # Add a filled circle for the Earth; make sure it's on top of the streamlines.
-ax.add_patch(Circle((0, 0), RE, color='b', zorder=100,))
+ax.add_patch(Circle((0, 0), RE, color='b', zorder=100, ))
 ax = plt.gca()
 
 ax.spines['left'].set_color('none')
@@ -50,6 +50,6 @@ ax.set_xlim(-xmax, xmax)
 ax.set_ylim(-ymax, ymax)
 ax.set_aspect('equal')
 plt.style.use('dark_background')
-plt.plot([0, 0], [-100, 100], 'w--', lw=0.3) # origin line
+plt.plot([0, 0], [-100, 100], 'w--', lw=0.3)  # origin line
 
 plt.show()
