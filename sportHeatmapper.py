@@ -2,7 +2,8 @@ import gpxpy
 import pandas as pd
 import folium
 from xml.dom import minidom
-
+from os import listdir
+from os.path import join, isfile
 
 def process_gpx_to_df(file_name):
     gpx = gpxpy.parse(open(file_name))
@@ -31,11 +32,18 @@ def process_gpx_to_df(file_name):
 
     return gpx_df, points, type
 
+path = r"activities"
+for filename in listdir(path):  # iterates over all the files in 'path'
+    full_path = join(path, filename)  # joins the path with the filename
+    if isfile(full_path):  # validate that it is a file
+        with open(full_path) as f:  # open the file
+            gpx_df, points, type = process_gpx_to_df(filename)
+
+#gpx_df, points, type = process_gpx_to_df("2169765006.gpx")
+#print(type)
+#print(process_gpx_to_df("2169765006.gpx"))
 
 
-gpx_df, points, type = process_gpx_to_df("2169765006.gpx")
-print(type)
-print(process_gpx_to_df("2169765006.gpx"))
 mymap = folium.Map( location=[ gpx_df.Latitude.mean(), gpx_df.Longitude.mean() ], zoom_start=6, tiles=None)
 folium.PolyLine(points, color='red', weight=4.5, opacity=.5).add_to(mymap)
 folium.TileLayer("openstreetmap", name="OpenStreet Map").add_to(mymap)
