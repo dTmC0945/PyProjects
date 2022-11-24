@@ -42,8 +42,10 @@ def VectorPlot(array):
     plt.draw()
     plt.show()
 
+    return plot_array
 
-digits = 10000  # number of digits to be plotted
+
+digits = 1000  # number of digits to be plotted
 mp.dps = digits  # sets the precision to the mpmath function
 
 value = mp.nstr((mp.mpf(mp.pi)), digits)  # gets the pi value and converts into string.
@@ -59,7 +61,6 @@ my_list.remove('.')  # removes the annoying .
 data = list(map(int, my_list))  # converts the string values to integer values. The final hurdle
 
 Array = np.zeros((digits + 1, 2))  # generate a zero array for the vector plot
-
 # convert the bits into a vector plot.
 k = 1
 for n in data:
@@ -67,4 +68,9 @@ for n in data:
     k += 1
 
 # Finally plotting
-VectorPlot(Array)
+k = VectorPlot(Array)
+p = np.hsplit(k, [2])
+
+a = p[0]
+
+plt.hist(a[:,0], bins=200)
