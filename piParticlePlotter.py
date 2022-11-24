@@ -25,23 +25,6 @@ def VectorPlot(array):
 
     plot_array[-1] = [0, 0, 0, 0]
 
-    x, y, u, v = zip(*plot_array)
-    plt.style.use('dark_background')
-
-    plt.figure()
-    plt.plot(0, 0, 'ow')  # plot a white point at the origin
-    ax = plt.gca()
-    ax.quiver(x, y, u, v, scale_units='xy', color=["r", "b", "g", "c", "m", "y", "w"], scale=1)
-
-    ax.spines['left'].set_color('none')
-    ax.spines['right'].set_color('none')
-    ax.spines['bottom'].set_color('none')
-    ax.spines['top'].set_color('none')
-    ax.set_aspect('equal')
-    ax.grid(False, which='both')
-    plt.draw()
-    plt.show()
-
     return plot_array
 
 
@@ -68,9 +51,54 @@ for n in data:
     k += 1
 
 # Finally plotting
-k = VectorPlot(Array)
-p = np.hsplit(k, [2])
+left, width = 0.1, 0.65
+bottom, height = 0.1, 0.65
+spacing = 0.005
 
-a = p[0]
+rect_diff = [left, bottom, width, height]
+rect_histx = [left, bottom + height + spacing, width, 0.2]
+rect_histy = [left + width + spacing, bottom, 0.2, height]
 
-plt.hist(a[:,0], bins=200)
+plt.style.use('dark_background')
+
+
+plt.figure(figsize=(6, 6))
+
+ax_diff = plt.axes(rect_diff)
+ax_diff.tick_params(direction='in', top=False, right=True)
+ax_histx = plt.axes(rect_histx)
+ax_histx.tick_params(direction='in', labelbottom=False)
+ax_histy = plt.axes(rect_histy)
+ax_histy.tick_params(direction='in', labelleft=False)
+
+plot_array = VectorPlot(Array)
+
+x, y, u, v = zip(*plot_array)
+
+
+#plt.plot(0, 0, 'ow')  # plot a white point at the origin
+#ax_diff = plt.gca()
+ax_diff.quiver(x, y, u, v, scale_units='xy', color=["r", "b", "g", "c", "m", "y", "w"], scale=1)
+
+ax_diff.spines['left'].set_color('none')
+ax_diff.spines['right'].set_color('none')
+ax_diff.spines['bottom'].set_color('none')
+ax_diff.spines['top'].set_color('none')
+ax_diff.set_aspect('equal')
+ax_diff.grid(False, which='both')
+
+
+Xx = plot_array[:, 0]
+Yy = plot_array[:, 1]
+
+binwidth = 0.1
+lim = np.ceil(np.abs([x, y]).max() / binwidth) * binwidth
+ax_diff.set_xlim((-lim, lim))
+ax_diff.set_ylim((-lim, lim))
+
+bins = np.arange(-lim, lim + binwidth, binwidth)
+
+ax_histx.hist(Xx, bins=bins)
+ax_histy.hist(Yy, bins=bins, orientation='horizontal')
+
+plt.show()
