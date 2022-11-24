@@ -33,26 +33,28 @@ def process_gpx_to_df(file_name):
     return gpx_df, points, type
 
 dirname = "activities"
-
+i = 0
 paths = Path(dirname).glob("*.gpx")
 
 for filename in os.listdir(dirname):
-    i = 0
+
     if filename.endswith(".gpx"):
         if i == 0:
             gpx_df, points, type = process_gpx_to_df("activities/" + filename)
             mymap = folium.Map(location=[gpx_df.Latitude.mean(), gpx_df.Longitude.mean()], zoom_start=6, tiles=None)
             folium.PolyLine(points, color='red', weight=4.5, opacity=.5).add_to(mymap)
             folium.TileLayer("openstreetmap", name="OpenStreet Map").add_to(mymap)
-            mymap.save('aee.html')
+
             i += 1
         else:
+            print(mymap)
             gpx_df, points, type = process_gpx_to_df("activities/" + filename)
+            symap = folium.Map(location=[gpx_df.Latitude.mean(), gpx_df.Longitude.mean()], zoom_start=6, tiles=None)
             folium.PolyLine(points, color='red', weight=4.5, opacity=.5).add_to(mymap)
             folium.TileLayer("openstreetmap", name="OpenStreet Map").add_to(mymap)
 
 
-
+mymap.save('aee.html')
 
 # gpx_df, points, type = process_gpx_to_df("2169765006.gpx")
 # print(type)
