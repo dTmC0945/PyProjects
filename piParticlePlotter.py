@@ -28,7 +28,7 @@ def VectorPlot(array):
     return plot_array
 
 
-digits = 1000  # number of digits to be plotted
+digits = 100000  # number of digits to be plotted
 mp.dps = digits  # sets the precision to the mpmath function
 
 value = mp.nstr((mp.mpf(mp.pi)), digits)  # gets the pi value and converts into string.
@@ -61,7 +61,6 @@ rect_histy = [left + width + spacing, bottom, 0.2, height]
 
 plt.style.use('dark_background')
 
-
 plt.figure(figsize=(6, 6))
 
 ax_diff = plt.axes(rect_diff)
@@ -75,9 +74,8 @@ plot_array = VectorPlot(Array)
 
 x, y, u, v = zip(*plot_array)
 
-
-#plt.plot(0, 0, 'ow')  # plot a white point at the origin
-#ax_diff = plt.gca()
+ax_diff.plot(0, 0, 'ow')  # plot a white point at the origin
+# ax_diff = plt.gca()
 ax_diff.quiver(x, y, u, v, scale_units='xy', color=["r", "b", "g", "c", "m", "y", "w"], scale=1)
 
 ax_diff.spines['left'].set_color('none')
@@ -87,6 +85,7 @@ ax_diff.spines['top'].set_color('none')
 ax_diff.set_aspect('equal')
 ax_diff.grid(False, which='both')
 
+ax_diff.axis("off")
 
 Xx = plot_array[:, 0]
 Yy = plot_array[:, 1]
@@ -100,5 +99,13 @@ bins = np.arange(-lim, lim + binwidth, binwidth)
 
 ax_histx.hist(Xx, bins=bins)
 ax_histy.hist(Yy, bins=bins, orientation='horizontal')
+
+ax_histx.spines['left'].set_color('none')
+ax_histx.spines['right'].set_color('none')
+ax_histx.spines['top'].set_color('none')
+
+ax_histy.spines['bottom'].set_color('none')
+ax_histy.spines['right'].set_color('none')
+ax_histy.spines['top'].set_color('none')
 
 plt.show()
