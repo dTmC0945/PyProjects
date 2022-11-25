@@ -28,7 +28,7 @@ def VectorPlot(array):
     return plot_array
 
 
-digits = 1000  # number of digits to be plotted
+digits = 5000  # number of digits to be plotted
 mp.dps = digits  # sets the precision to the mpmath function
 
 value = mp.nstr((mp.mpf(mp.pi)), digits)  # gets the pi value and converts into string.
@@ -82,13 +82,13 @@ ax_diff.spines['left'].set_color('none')
 ax_diff.spines['right'].set_color('none')
 ax_diff.spines['bottom'].set_color('none')
 ax_diff.spines['top'].set_color('none')
+
 ax_diff.set_aspect('equal')
 ax_diff.grid(False, which='both')
 
 ax_diff.axis("off")
 
-Xx = plot_array[:, 0]
-Yy = plot_array[:, 1]
+Xx, Yy = plot_array[:, 0], plot_array[:, 1]
 
 binwidth = 0.1
 lim = np.ceil(np.abs([x, y]).max() / binwidth) * binwidth
