@@ -1,15 +1,30 @@
+text = input("Enter text: All uppercase or all lowercase:")
 
 
-text = input("Enter text:")
+def ceasar(text):
+    array = list(text)
 
-array = list(text)
+    encryptedtext = []
 
-encryptedText = []
+    for character in array:
+        integerValue = ord(character)
+        if integerValue == 32:
+            encryptedtext.append(chr(integerValue))
+        else:
+            integerValue -= 3
+            if character.isupper():
+                if integerValue < 65:
+                    encryptedtext.append(chr(integerValue + 26))
+                else:
+                    encryptedtext.append(chr(integerValue))
 
-for character in array:
-    intall = ord(character)
-    if intall == 108:
-        encryptedText.append(chr(intall))
-    else:
-        intall -= 3
-    encryptedText.append(chr(intall))
+            if character.islower():
+                if integerValue < 97:
+                    encryptedtext.append(chr(integerValue + 26))
+                else:
+                    encryptedtext.append(chr(integerValue))
+
+    return "".join(encryptedtext)
+
+
+print(ceasar(text))
