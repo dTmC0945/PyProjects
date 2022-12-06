@@ -6,6 +6,21 @@ import os
 from pathlib import Path
 import plotly.express as px
 
+gpx_files = os.listdir("activities")
+
+coords_df = {}
+for i in range(len(gpx_files)):
+    gpx = gpxpy.parse(open('activities/' + gpx_files[i]))
+    track_coords = [[point.latitude, point.longitude, point.elevation]
+                    for track in gpx.tracks
+                    for segment in track.segments
+                    for point in segment.points]
+    coords_df[i] = pd.DataFrame(track_coords)
+
+heatcoords_df = pd.concat(coords_df, ignore_index=True)
+heatcoords_df.columns = ['Latitude', 'Longitude', 'Altitude']
+
+
 
 def process_gpx_to_df(file_name):
     gpx = gpxpy.parse(open(file_name))
@@ -55,7 +70,7 @@ for filename in os.listdir(dirname):
             folium.TileLayer("openstreetmap", name="OpenStreet Map").add_to(mymap)
 
 
-mymap.save('aee.html')
+mymap.save('Activities.html')
 
 # gpx_df, points, type = process_gpx_to_df("2169765006.gpx")
 # print(type)
