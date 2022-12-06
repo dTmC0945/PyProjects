@@ -4,6 +4,7 @@ import folium
 from xml.dom import minidom
 import os
 from pathlib import Path
+import plotly.express as px
 
 
 def process_gpx_to_df(file_name):
