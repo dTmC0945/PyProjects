@@ -9,24 +9,20 @@ import plotly.express as px
 gpx_files = os.listdir("activities")
 
 gpx_files.remove(".DS_Store")
-
+runningheatmap_df = {}
 coords_df = {}
+mymap = folium.Map()
 for i in range(len(gpx_files)):
     gpx = gpxpy.parse(open("activities/" + gpx_files[i]))
     track_coords = [[point.latitude, point.longitude, point.elevation]
                     for track in gpx.tracks
                     for segment in track.segments
                     for point in segment.points]
-    coords_df[i] = pd.DataFrame(track_coords)
-
-heatcoords_df = pd.concat(coords_df, ignore_index=True)
-heatcoords_df.columns = ['Latitude', 'Longitude', 'Altitude']
-
-runningheatmap = heatcoords_df.drop('Altitude', axis=1)
-
-mymap = folium.Map(location=[heatcoords_df.Latitude.mean(), heatcoords_df.Longitude.mean()], zoom_start=6, tiles=None)
-folium.PolyLine(runningheatmap, color='red', weight=2.5, opacity=.5).add_to(mymap)
-folium.TileLayer("openstreetmap", name="OpenStreet Map").add_to(mymap)
+    coords_df = pd.DataFrame(track_coords, columns=['Latitude', 'Longitude', 'Altitude'])
+    ref_df = coords_df.drop(["Altitude"], axis=1)
+    #mymap = folium.Map(location=[ref_df.Latitude.mean(), ref_df.Longitude.mean()], zoom_start=6, tiles=None)
+    folium.PolyLine(ref_df, color='blue', weight=1, opacity=1).add_to(mymap)
+    folium.TileLayer("openstreetmap", name="OpenStreet Map").add_to(mymap)
 
 
 mymap.save('Activities.html')
