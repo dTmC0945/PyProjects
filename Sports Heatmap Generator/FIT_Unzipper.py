@@ -15,7 +15,7 @@ for file in fit_files:
 # out_path = 'FIT files/8599976892.csv'
 # fit_file.to_csv(out_path)
 
-df = pd.read_csv("FIT files/8599976892.csv")
+df = pd.read_csv("FIT files/6531086260.csv")
 initial_filter = df.loc[df['Type'] == 'Data']
 
 exercise_type = str(initial_filter.loc[df["Message"] == "sport"].iloc[0]["Value 0"])
@@ -26,11 +26,17 @@ filtered_df = gps_data.loc[df['Message'] == 'record']
 
 result = filtered_df[["Value 1", "Value 2"]]
 
-# with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-#     print(result)
+with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+    print(result)
 
 mymap = folium.Map()
 results = result.rename(columns={"Value 1": "Latitude", "Value 2": "Longitude"})
+
+# Cleaning out the glitches
+for index in results.index:
+    value = results.loc['Latitude','Longitude']
+
+
 # result = result.iloc[7:-14]
 #
 # indx = results.loc[results['Latitude'] == 0]
@@ -40,5 +46,7 @@ elif exercise_type == "Run":
     folium.PolyLine(result.astype(float), color="red", weight=1.5, opacity=1).add_to(mymap)
 elif exercise_type == "Walk":
     folium.PolyLine(result.astype(float), color="green", weight=1.5, opacity=1).add_to(mymap)
+# elif exercise_type == "Strength":
+
 
 mymap.save('Act.html')
