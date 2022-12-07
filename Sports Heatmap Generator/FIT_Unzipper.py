@@ -2,6 +2,7 @@ from sh import gunzip
 import os
 from fit_tool.fit_file import FitFile
 import pandas as pd
+import folium
 
 location = os.listdir("FIT files")
 fit_files = [file for file in location if file[-7:].lower() == '.fit.gz']
@@ -15,5 +16,9 @@ for file in fit_files:
 #fit_file.to_csv(out_path)
 
 df = pd.read_csv("FIT files/7138243092.csv")
+mymap = folium.Map()
+result = df.drop(["Local ID"], axis = 1)
+folium.PolyLine(result, color='blue', weight=1, opacity=1).add_to(mymap)
+mymap.save('Activities.html')
 
-print(df)
+print(result)
