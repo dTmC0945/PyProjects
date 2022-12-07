@@ -20,7 +20,7 @@ for i in range(len(gpx_files)):
     ref_df = coords_df.drop(["Altitude"], axis=1)
     print(ref_df)
     # mymap = folium.Map(location=[ref_df.Latitude.mean(), ref_df.Longitude.mean()], zoom_start=6, tiles=None)
-    folium.PolyLine(ref_df, color='blue', weight=1, opacity=1).add_to(mymap)
+    folium.PolyLine(ref_df, color='blue', weight=10, opacity=1).add_to(mymap)
     # folium.TileLayer("openstreetmap", name="OpenStreet Map").add_to(mymap)
 
 mymap.save('Activities.html')

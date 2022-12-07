@@ -9,17 +9,17 @@ fit_files = [file for file in location if file[-7:].lower() == '.fit.gz']
 for file in fit_files:
     gunzip("FIT files/" + file)
 
-#path = 'FIT files/7138243092.fit'
-#fit_file = FitFile.from_file(path)
+path = 'FIT files/8203768911.fit'
+fit_file = FitFile.from_file(path)
 
-#out_path = 'FIT files/7138243092.csv'
-#fit_file.to_csv(out_path)
+out_path = 'FIT files/8203768911.csv'
+fit_file.to_csv(out_path)
 
-df = pd.read_csv("FIT files/7138243092.csv")
+df = pd.read_csv("FIT files/8203768911.csv")
 mymap = folium.Map()
 result = df[["Value 1", "Value 2"]]
+result = result.iloc[100:-100]
+print(result.astype(float))
 
-print(result)
-
-folium.PolyLine(result, color='blue', weight=1, opacity=1).add_to(mymap)
-mymap.save('Activities.html')
+folium.PolyLine(result.astype(float), color='red', weight=2, opacity=1).add_to(mymap)
+mymap.save('Act.html')
