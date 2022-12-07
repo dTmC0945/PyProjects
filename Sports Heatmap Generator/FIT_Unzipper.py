@@ -17,8 +17,9 @@ for file in fit_files:
 
 df = pd.read_csv("FIT files/7138243092.csv")
 mymap = folium.Map()
-result = df.drop(["Local ID"], axis = 1)
-folium.PolyLine(result, color='blue', weight=1, opacity=1).add_to(mymap)
-mymap.save('Activities.html')
+result = df[["Value 1", "Value 2"]]
 
 print(result)
+
+folium.PolyLine(result, color='blue', weight=1, opacity=1).add_to(mymap)
+mymap.save('Activities.html')
