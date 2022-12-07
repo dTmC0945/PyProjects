@@ -6,88 +6,176 @@ import gzip
 from sh import gunzip
 import fitdecode
 from datetime import datetime, timedelta
-from typing import Dict, Union, Optional,Tuple
+from typing import Dict, Union, Optional, Tuple
+import csv
+import pytz
+import fitparse
+from copy import copy
 
-#gunzip('FIT files/3694695330.fit.gz')
+# gunzip('FIT files/3694695330.fit.gz')
 
-# The names of the columns we will use in our points DataFrame. For the data we will be getting
-# from the FIT data, we use the same name as the field names to make it easier to parse the data.
-POINTS_COLUMN_NAMES = ['latitude', 'longitude', 'lap', 'altitude', 'timestamp', 'heart_rate', 'cadence', 'speed']
+# for general tracks
+allowed_fields = ['timestamp', 'position_lat', 'position_long', 'distance',
+                  'enhanced_altitude', 'altitude', 'enhanced_speed',
+                  'speed', 'heart_rate', 'cadence', 'fractional_cadence',
+                  'temperature']
+required_fields = ['timestamp', 'position_lat', 'position_long', 'altitude']
 
-# The names of the columns we will use in our laps DataFrame.
-LAPS_COLUMN_NAMES = ['number', 'start_time', 'total_distance', 'total_elapsed_time',
-                     'max_speed', 'max_heart_rate', 'avg_heart_rate']
+# for laps
+lap_fields = ['timestamp', 'start_time', 'start_position_lat', 'start_position_long',
+              'end_position_lat', 'end_position_long', 'total_elapsed_time', 'total_timer_time',
+              'total_distance', 'total_strides', 'total_calories', 'enhanced_avg_speed', 'avg_speed',
+              'enhanced_max_speed', 'max_speed', 'total_ascent', 'total_descent',
+              'event', 'event_type', 'avg_heart_rate', 'max_heart_rate',
+              'avg_running_cadence', 'max_running_cadence',
+              'lap_trigger', 'sub_sport', 'avg_fractional_cadence', 'max_fractional_cadence',
+              'total_fractional_cycles', 'avg_vertical_oscillation', 'avg_temperature', 'max_temperature']
+# last field above manually generated
+lap_required_fields = ['timestamp', 'start_time', 'lap_trigger']
+
+# start/stop events
+start_fields = ['timestamp', 'timer_trigger', 'event', 'event_type', 'event_group']
+start_required_fields = copy(start_fields)
+#
+all_allowed_fields = set(allowed_fields + lap_fields + start_fields)
+
+UTC = pytz.UTC
+CST = pytz.timezone('US/Central')
+
+# files beyond the main file are assumed to be created, as the log will be updated only after they are created
+ALT_FILENAME = True
+ALT_LOG = 'file_log.log'
+
+def write_fitfile_to_csv(fitfile, output_file='test_output.csv', original_filename=None):
+    messages = fitfile.messages
+    data = []
+    lap_data = []
+    start_data = []
+    if ALT_FILENAME:
+        # this should probably work, but it's possibly
+        # based on a certain version of the file/device
+        timestamp = get_timestamp(messages)
+        event_type = get_event_type(messages)
+        if event_type is None:
+            event_type = 'other'
+        output_file = event_type + '_' + timestamp.strftime('%Y-%m-%d_%H-%M-%S.csv')
+    for m in messages:
+        skip = False
+        skip_lap = False
+        skip_start = False
+        if not hasattr(m, 'fields'):
+            continue
+        fields = m.fields
+        # check for important data types
+        mdata = {}
+        for field in fields:
+            if field.name in all_allowed_fields:
+                if field.name == 'timestamp':
+                    mdata[field.name] = UTC.localize(field.value).astimezone(CST)
+                else:
+                    mdata[field.name] = field.value
+        for rf in required_fields:
+            if rf not in mdata:
+                skip = True
+        for lrf in lap_required_fields:
+            if lrf not in mdata:
+                skip_lap = True
+        for srf in start_required_fields:
+            if srf not in mdata:
+                skip_start = True
+        if not skip:
+            data.append(mdata)
+        elif not skip_lap:
+            lap_data.append(mdata)
+        elif not skip_start:
+            start_data.append(mdata)
+    # write to csv
+    # general track info
+    with open(output_file, 'w') as f:
+        writer = csv.writer(f)
+        writer.writerow(allowed_fields)
+        for entry in data:
+            writer.writerow([str(entry.get(k, '')) for k in allowed_fields])
+    # lap info
+    with open(lap_filename(output_file), 'w') as f:
+        writer = csv.writer(f)
+        writer.writerow(lap_fields)
+        for entry in lap_data:
+            writer.writerow([str(entry.get(k, '')) for k in lap_fields])
+    # start/stop info
+    with open(start_filename(output_file), 'w') as f:
+        writer = csv.writer(f)
+        writer.writerow(start_fields)
+        for entry in start_data:
+            writer.writerow([str(entry.get(k, '')) for k in start_fields])
+    print('wrote %s' % output_file)
+    print('wrote %s' % lap_filename(output_file))
+    print('wrote %s' % start_filename(output_file))
+    if ALT_FILENAME:
+        append_log(original_filename)
+def read_log():
+    with open(ALT_LOG, 'r') as f:
+        lines = f.read().split()
+    return lines
 
 
-def get_fit_lap_data(frame: fitdecode.records.FitDataMessage) -> Dict[str, Union[float, datetime, timedelta, int]]:
-    """Extract some data from a FIT frame representing a lap and return
-    it as a dict.
-    """
+def append_log(filename):
+    with open(ALT_LOG, 'a') as f:
+        f.write(filename)
+        f.write('\n')
+    return None
 
-    data: Dict[str, Union[float, datetime, timedelta, int]] = {}
+files = os.listdir("activities")
+fit_files = [file for file in files if file[-4:].lower() == '.fit']
 
-    for field in LAPS_COLUMN_NAMES[1:]:  # Exclude 'number' (lap number) because we don't get that
-        # from the data but rather count it ourselves
-        if frame.has_field(field):
-            data[field] = frame.get_value(field)
-
-    return data
-
-
-def get_fit_point_data(frame: fitdecode.records.FitDataMessage) -> Optional[
-    Dict[str, Union[float, int, str, datetime]]]:
-    """Extract some data from an FIT frame representing a track point
-    and return it as a dict.
-    """
-
-    data: Dict[str, Union[float, int, str, datetime]] = {}
-
-    if not (frame.has_field('position_lat') and frame.has_field('position_long')):
-        # Frame does not have any latitude or longitude data. We will ignore these frames in order to keep things
-        # simple, as we did when parsing the TCX file.
-        return None
+if ALT_FILENAME:
+    if not os.path.exists(ALT_LOG):
+        os.system('touch %s' % ALT_FILENAME)
+        file_list = []
     else:
-        data['latitude'] = frame.get_value('position_lat') / ((2 ** 32) / 360)
-        data['longitude'] = frame.get_value('position_long') / ((2 ** 32) / 360)
+        file_list = read_log()
+for file in fit_files:
+    if ALT_FILENAME:
+        if file in file_list:
+            continue
+    new_filename = file[:-4] + '.csv'
+    if os.path.exists(new_filename) and not ALT_FILENAME:
+        # print('%s already exists. skipping.' % new_filename)
+        continue
+    fitfile = fitparse.FitFile(file, data_processor=fitparse.StandardUnitsDataProcessor())
+    print('converting %s' % file)
+write_fitfile_to_csv(fitfile, new_filename, file)
+print('finished conversions')
 
-    for field in POINTS_COLUMN_NAMES[3:]:
-        if frame.has_field(field):
-            data[field] = frame.get_value(field)
 
-    return data
+def lap_filename(output_filename):
+    return output_filename[:-4] + '_laps.csv'
 
 
-def get_dataframes(fname: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    """Takes the path to a FIT file (as a string) and returns two Pandas
-    DataFrames: one containing data about the laps, and one containing
-    data about the individual points.
-    """
+def start_filename(output_filename):
+    return output_filename[:-4] + '_starts.csv'
 
-    points_data = []
-    laps_data = []
-    lap_no = 1
-    with fitdecode.FitReader(fname) as fit_file:
-        for frame in fit_file:
-            if isinstance(frame, fitdecode.records.FitDataMessage):
-                if frame.name == 'record':
-                    single_point_data = get_fit_point_data(frame)
-                    if single_point_data is not None:
-                        single_point_data['lap'] = lap_no
-                        points_data.append(single_point_data)
-                elif frame.name == 'lap':
-                    single_lap_data = get_fit_lap_data(frame)
-                    single_lap_data['number'] = lap_no
-                    laps_data.append(single_lap_data)
-                    lap_no += 1
 
-    # Create DataFrames from the data we have collected. If any information is missing from a particular lap or track
-    # point, it will show up as a null value or "NaN" in the DataFrame.
+def get_timestamp(messages):
+    for m in messages:
+        fields = m.fields
+        for f in fields:
+            if f.name == 'timestamp':
+                return f.value
+    return None
 
-    laps_df = pd.DataFrame(laps_data, columns=LAPS_COLUMN_NAMES)
-    laps_df.set_index('number', inplace=True)
-    points_df = pd.DataFrame(points_data, columns=POINTS_COLUMN_NAMES)
 
-    return laps_df, points_df
+def get_event_type(messages):
+    for m in messages:
+        fields = m.fields
+        for f in fields:
+            if f.name == 'sport':
+                return f.value
+    return None
+
+
+
+
 gpx_files = os.listdir("activities")
 
 gpx_files.remove(".DS_Store")
@@ -102,10 +190,9 @@ for i in range(len(gpx_files)):
                     for point in segment.points]
     coords_df = pd.DataFrame(track_coords, columns=['Latitude', 'Longitude', 'Altitude'])
     ref_df = coords_df.drop(["Altitude"], axis=1)
-    #mymap = folium.Map(location=[ref_df.Latitude.mean(), ref_df.Longitude.mean()], zoom_start=6, tiles=None)
+    # mymap = folium.Map(location=[ref_df.Latitude.mean(), ref_df.Longitude.mean()], zoom_start=6, tiles=None)
     folium.PolyLine(ref_df, color='blue', weight=1, opacity=1).add_to(mymap)
-    #folium.TileLayer("openstreetmap", name="OpenStreet Map").add_to(mymap)
-
+    # folium.TileLayer("openstreetmap", name="OpenStreet Map").add_to(mymap)
 
 mymap.save('Activities.html')
 
