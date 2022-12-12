@@ -3,7 +3,7 @@ import pandas as pd
 
 
 df = pd.DataFrame([])
-
+array = []
 # Load the FIT file
 fitfile = fitparse.FitFile("6104083085.fit")
 
@@ -12,14 +12,15 @@ fitfile = fitparse.FitFile("6104083085.fit")
 for record in fitfile.get_messages("record"):
     # Records can contain multiple pieces of data (ex: timestamp, latitude, longitude, etc)
     for data in record:
-        k = data.value
-        print(k)
 
 
         # Print the name and value of the data (and the units if it has any)
-        # if data.units:
-        #     print(" * {}: {} ({})".format(data.name, data.value, data.units))
-        # else:
-        #     print(" * {}: {}".format(data.name, data.value))
+         if data.units:
+             array.append(data.value)
+             print(" * {}: {} ({})".format(data.name, data.value, data.units))
+         else:
+             print(" * {}: {}".format(data.name, data.value))
 
     print("---")
+
+print(array)
