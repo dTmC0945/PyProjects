@@ -56,7 +56,15 @@ fit_files = [file for file in fit_location if file[-4:].lower() == '.fit']
 gpx_files = [file for file in gpx_location if file[-4:].lower() == '.gpx']
 
 # Create the map
-Sport_Map = folium.Map()
+Sport_Map = folium.Map(location=[53.48, -3], zoom_start=7)
+
+# Create the groups
+running_group = folium.FeatureGroup(name="Running").add_to(Sport_Map)
+hiking_group = folium.FeatureGroup(name="Hiking").add_to(Sport_Map)
+cycling_group = folium.FeatureGroup(name="Cycling").add_to(Sport_Map)
+swim_group = folium.FeatureGroup(name="Swimming").add_to(Sport_Map)
+walking_group = folium.FeatureGroup(name="Walking").add_to(Sport_Map)
+trail_r_group = folium.FeatureGroup(name="Trail Running").add_to(Sport_Map)
 
 # Parses through the gpx files
 for file in gpx_files:
@@ -73,29 +81,37 @@ for file in gpx_files:
 
     # GPX reserves number 9 for running activities
     if track.type == "9":
-        folium.PolyLine(gpx_df.astype(float), color="red", weight=2.5, opacity=0.75).add_to(Sport_Map)
+        # add values to running group
+        running_group.add_child(folium.PolyLine(gpx_df.astype(float), color="red", weight=3, opacity=0.75))
 
-    # GPX reserves number 4 for running hiking
+    # GPX reserves number 4 for hiking activities
     elif track.type == "4":
-        folium.PolyLine(gpx_df.astype(float), color="purple", weight=2.5, opacity=0.75).add_to(Sport_Map)
+        # add values to hiking group
+        hiking_group.add_child(folium.PolyLine(gpx_df.astype(float), color="purple", weight=3, opacity=0.75))
 
-# for file in fit_files:
-#     sport, result = FITtoGPS(file)
-#     if len(result) > 10:
-#         if bool(sport):
-#             if sport[0] == "name: Walk":
-#                 folium.PolyLine(result.astype(float), color="green", weight=2.5, opacity=0.75).add_to(Sport_Map)
-#             elif sport[0] == "name: Bike":
-#                 folium.PolyLine(result.astype(float), color="blue", weight=2.5, opacity=0.75).add_to(Sport_Map)
-#             elif sport[0] == "name: Run":
-#                 folium.PolyLine(result.astype(float), color="red", weight=2.5, opacity=0.75).add_to(Sport_Map)
-#             elif sport[0] == "name: Trail Run":
-#                 folium.PolyLine(result.astype(float), color="darkred", weight=2.5, opacity=0.75).add_to(Sport_Map)
-#             elif sport[0] == "name: Open Water":
-#                 folium.PolyLine(result.astype(float), color="cadetblue", weight=2.5, opacity=0.75).add_to(Sport_Map)
-#             elif sport[0] == "name: Hike":
-#                 folium.PolyLine(result.astype(float), color="purple", weight=2.5, opacity=0.75).add_to(Sport_Map)
-#             else:
-#                 folium.PolyLine(result.astype(float), color="red", weight=2.5, opacity=0.75).add_to(Sport_Map)
+for file in fit_files:
+    sport, result = FITtoGPS(file)
+    if len(result) > 10:
+        if bool(sport):
+            if sport[0] == "name: Walk":
+                walking_group.add_child(folium.PolyLine(result.astype(float), color="green", weight=3, opacity=0.75))
+            elif sport[0] == "name: Bike":
+                cycling_group.add_child(folium.PolyLine(result.astype(float), color="blue", weight=3, opacity=0.75))
+            elif sport[0] == "name: Run":
+                running_group.add_child(folium.PolyLine(result.astype(float), color="red", weight=3, opacity=0.75))
+            elif sport[0] == "name: Trail Run":
+                trail_r_group.add_child(folium.PolyLine(result.astype(float), color="darkred", weight=3, opacity=0.75))
+            elif sport[0] == "name: Open Water":
+                swim_group.add_child(folium.PolyLine(result.astype(float), color="cadetblue", weight=3, opacity=0.75))
+            elif sport[0] == "name: Hike":
+                hiking_group.add_child(folium.PolyLine(result.astype(float), color="purple", weight=3, opacity=0.75))
+            else:
+                hiking_group.add_child(folium.PolyLine(result.astype(float), color="purple", weight=3, opacity=0.75))
 
+# Finally add the layer controller for the map
+folium.LayerControl().add_to(Sport_Map)
+
+# Save the map information as Activities.html
 Sport_Map.save('Activities.html')
+
+# End of code
