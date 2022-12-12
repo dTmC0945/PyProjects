@@ -26,8 +26,7 @@ csv_files = [file for file in location if file[-4:].lower() == '.fit']
 mymap = folium.Map()
 for file in fit_files:
     print(file)
-    laps_df, points_df = ps.get_dataframes("FIT/63643338"
-                                           "00.fit")
+    laps_df, points_df = ps.get_dataframes("FIT/6364333800.fit")
     filtered_points_df = points_df[["latitude", "longitude"]]
     print(filtered_points_df)
     # print(file)
