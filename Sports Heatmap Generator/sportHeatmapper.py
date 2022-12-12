@@ -26,13 +26,14 @@ def FITtoGPS(filename):
 
             # Print the name and value of the data (and the units if it has any)
             if gps.units:
+                # Some exercises may not have GPS data (i.e., strength or indoor swim), this breaks the loop for it.
                 if gps.value is None:
                     break
 
                 # Retrieve the latitude and longitude data from the FIT file
-                if gps.name == "position_lat":
+                if gps.name == "position_lat":  # get latitude data
                     lat = array_lat.append(gps.value * 180 / (2 ** 31))
-                if gps.name == "position_long":
+                if gps.name == "position_long":  # get longitude data
                     lat = array_lon.append(gps.value * 180 / (2 ** 31))
 
     # Finally record the latitude and longitude in a dataframe (from Pandas)
@@ -42,13 +43,16 @@ def FITtoGPS(filename):
     return array_id, df
 
 
+# Declare the location for the files for FIT and GPX files
 fit_location = os.listdir("FIT")
 gpx_location = os.listdir("GPX")
 
+# In those files, find the filenames that end with the .fit and .gpx ends
 fit_files = [file for file in fit_location if file[-4:].lower() == '.fit']
 gpx_files = [file for file in gpx_location if file[-4:].lower() == '.gpx']
 
-mymap = folium.Map()
+# Create the map
+Sport_Map = folium.Map()
 
 for file in gpx_files:
     gpx = gpxpy.parse(open("GPX/" + file))
@@ -63,27 +67,27 @@ for file in gpx_files:
     gpx_df = pd.DataFrame(data, columns=columns)
 
     if track.type == "9":
-        folium.PolyLine(gpx_df.astype(float), color="red", weight=2.5, opacity=0.75).add_to(mymap)
+        folium.PolyLine(gpx_df.astype(float), color="red", weight=2.5, opacity=0.75).add_to(Sport_Map)
     elif track.type == "4":
-        folium.PolyLine(gpx_df.astype(float), color="purple", weight=2.5, opacity=0.75).add_to(mymap)
+        folium.PolyLine(gpx_df.astype(float), color="purple", weight=2.5, opacity=0.75).add_to(Sport_Map)
 
 for file in fit_files:
     sport, result = FITtoGPS(file)
     if len(result) > 10:
         if bool(sport):
             if sport[0] == "name: Walk":
-                folium.PolyLine(result.astype(float), color="green", weight=2.5, opacity=0.75).add_to(mymap)
+                folium.PolyLine(result.astype(float), color="green", weight=2.5, opacity=0.75).add_to(Sport_Map)
             elif sport[0] == "name: Bike":
-                folium.PolyLine(result.astype(float), color="blue", weight=2.5, opacity=0.75).add_to(mymap)
+                folium.PolyLine(result.astype(float), color="blue", weight=2.5, opacity=0.75).add_to(Sport_Map)
             elif sport[0] == "name: Run":
-                folium.PolyLine(result.astype(float), color="red", weight=2.5, opacity=0.75).add_to(mymap)
+                folium.PolyLine(result.astype(float), color="red", weight=2.5, opacity=0.75).add_to(Sport_Map)
             elif sport[0] == "name: Trail Run":
-                folium.PolyLine(result.astype(float), color="darkred", weight=2.5, opacity=0.75).add_to(mymap)
+                folium.PolyLine(result.astype(float), color="darkred", weight=2.5, opacity=0.75).add_to(Sport_Map)
             elif sport[0] == "name: Open Water":
-                folium.PolyLine(result.astype(float), color="cadetblue", weight=2.5, opacity=0.75).add_to(mymap)
+                folium.PolyLine(result.astype(float), color="cadetblue", weight=2.5, opacity=0.75).add_to(Sport_Map)
             elif sport[0] == "name: Hike":
-                folium.PolyLine(result.astype(float), color="purple", weight=2.5, opacity=0.75).add_to(mymap)
+                folium.PolyLine(result.astype(float), color="purple", weight=2.5, opacity=0.75).add_to(Sport_Map)
             else:
-                folium.PolyLine(result.astype(float), color="red", weight=2.5, opacity=0.75).add_to(mymap)
+                folium.PolyLine(result.astype(float), color="red", weight=2.5, opacity=0.75).add_to(Sport_Map)
 
-mymap.save('Act.html')
+Sport_Map.save('Act.html')
