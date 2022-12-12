@@ -20,19 +20,19 @@ for file in fit_files:
     #results = result.rename(columns={"Value 1": "Latitude", "Value 2": "Longitude"})
         if bool(sport):
             if sport[0] == "name: Walk":
-                folium.PolyLine(result.astype(float), color='green', weight=1.5, opacity=1).add_to(mymap)
+                folium.PolyLine(result.astype(float), color='green', weight=2, opacity=0.5).add_to(mymap)
             elif sport[0] == "name: Bike":
-                folium.PolyLine(result.astype(float), color='blue', weight=1.5, opacity=1).add_to(mymap)
+                folium.PolyLine(result.astype(float), color='blue', weight=2, opacity=0.5).add_to(mymap)
             elif sport[0] == "name: Run":
-                folium.PolyLine(result.astype(float), color='red', weight=1.5, opacity=1).add_to(mymap)
+                folium.PolyLine(result.astype(float), color='red', weight=2, opacity=0.5).add_to(mymap)
             elif sport[0] == "name: Trail Run":
-                folium.PolyLine(result.astype(float), color='darkred', weight=1.5, opacity=1).add_to(mymap)
+                folium.PolyLine(result.astype(float), color='darkred', weight=2, opacity=0.5).add_to(mymap)
             elif sport[0] == "name: Open Water":
-                folium.PolyLine(result.astype(float), color='cadetblue', weight=1.5, opacity=1).add_to(mymap)
+                folium.PolyLine(result.astype(float), color='cadetblue', weight=2, opacity=0.5).add_to(mymap)
             elif sport[0] == "name: Hike":
-                folium.PolyLine(result.astype(float), color='purple', weight=1.5, opacity=1).add_to(mymap)
+                folium.PolyLine(result.astype(float), color='purple', weight=2, opacity=0.5).add_to(mymap)
             else:
-                folium.PolyLine(result.astype(float), color='red', weight=1.5, opacity=1).add_to(mymap)
+                folium.PolyLine(result.astype(float), color='red', weight=2, opacity=0.5).add_to(mymap)
 
 # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
 #     print(result)
