@@ -15,8 +15,7 @@ location = os.listdir("FIT")
 fit_files = [file for file in location if file[-4:].lower() == '.fit']
 csv_files = [file for file in location if file[-4:].lower() == '.fit']
 
-# for file in fit_files:
-#     gunzip("FIT files/" + file)
+
 
 # path = 'FIT files/8599976892.fit'
 # fit_file = FitFile.from_file(path)
