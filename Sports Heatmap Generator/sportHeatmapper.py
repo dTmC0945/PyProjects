@@ -1,14 +1,8 @@
-from sh import gunzip
 import os
 import folium
 import gpxpy
 import fitparse
 import pandas as pd
-
-
-def FITunzipper(filename):
-    for file in fit_files:
-        gunzip("FIT files/" + file)
 
 
 def FITtoGPS(filename):
@@ -37,9 +31,9 @@ def FITtoGPS(filename):
 
                 # Retrieve the latitude and longitude data from the FIT file
                 if gps.name == "position_lat":  # get latitude data
-                    lat = array_lat.append(gps.value * 180 / (2 ** 31))
+                    array_lat.append(gps.value * 180 / (2 ** 31))
                 if gps.name == "position_long":  # get longitude data
-                    lat = array_lon.append(gps.value * 180 / (2 ** 31))
+                    array_lon.append(gps.value * 180 / (2 ** 31))
 
     # Finally record the latitude and longitude in a dataframe (from Pandas)
     df = pd.DataFrame({"Latitude": array_lat, "Longitude": array_lon})
