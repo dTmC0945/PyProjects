@@ -14,6 +14,11 @@ class GameOfLife:
         self.active_color = active_color
         self.inactive_color = inactive_color
 
+        self.columns = int(height/scale)
+        self.rows = int(width/scale)
+
+        self.grid = np.random.randint(0, 2, size=(self.rows, self.columns), dtype=bool)
+
 
 pygame.init()
 pygame.display.set_caption("Conway's Game of Life")
