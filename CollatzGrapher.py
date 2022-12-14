@@ -28,7 +28,7 @@ def VectorPlot(array):
     return plot_array
 
 
-digits = 5000  # number of digits to be plotted
+digits = 500  # number of digits to be plotted
 mp.dps = digits  # sets the precision to the mpmath function
 
 value = mp.nstr((mp.mpf(mp.pi)), digits)  # gets the pi value and converts into string.
