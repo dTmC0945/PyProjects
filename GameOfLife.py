@@ -14,4 +14,6 @@ while True:
             sys.exit()
 
     screen.fill((255,255,255))
+
+    pygame.draw.rect(screen, (25, 25, 112), [(640/2) - 50, (480/2) - 50, 100, 100])
     pygame.display.update()
