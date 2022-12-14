@@ -31,6 +31,13 @@ class GameOfLife:
                     else:
                         pygame.draw.rect(self.surface, self.inactive_color, [row * self.scale, col * self.scale, self.scale - self.offset, self.scale - self.offset])
 
+        def update_grid(self):
+            update_grid = self.grid.copy()
+            for row in range(update_grid.shape[0]):
+                for col in range(update_grid.shape[1]):
+                    update_grid[row, col] = self.update_cell(row, col)
+
+            self.grid = updated_grid
 
 pygame.init()
 pygame.display.set_caption("Conway's Game of Life")
@@ -52,4 +59,4 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-            sys.exit
+            sys.exit()
