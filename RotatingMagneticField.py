@@ -18,8 +18,8 @@ def update_quiver(num, Q, X, Y):
     fixed increment on each frame
     """
 
-    U = (X + np.sin(num * np.pi / 5) * 10)
-    V = (Y + np.cos(num * np.pi / 5) * 10)
+    U = (X + np.sin(num * np.pi / 10) * 10)
+    V = (Y + np.cos(num * np.pi / 10) * 10)
 
     Q.set_UVC(U, V)
 
