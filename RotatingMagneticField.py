@@ -5,7 +5,7 @@ from matplotlib import animation
 # X, Y = np.sin(np.arange(0, 0.01, 2*np.pi)), np.cos(np.arange(0, 0.01, 2*np.pi))
 
 X, Y = 0, 0
-U, V = 1*np.cos(np.pi/4), 1*np.sin(np.pi/4)
+U, V = 1*np.sin(np.pi/4), 1*np.cos(np.pi/4)
 fig, ax = plt.subplots(1, 1)
 
 Q = ax.quiver(X, Y, U, V, pivot='tail', color='b', units='inches')
