@@ -17,7 +17,7 @@ class MainWindow(QWidget):
 
         # create a button widget and connect its clicked signal
         # to a method
-        button = QPushButton('Clck me')
+        button = QPushButton('me')
         button.clicked.connect(self.button_clicked)
 
         # place the buton on window using a vertical box layout
