@@ -18,8 +18,8 @@ def update_quiver(num, Q, X, Y, phase):
     fixed increment on each frame
     """
 
-    U = X + (np.sin(num * 2 * np.pi / 100 - phase)) * np.sin(np.pi / 4) * 10
-    V = Y + (np.sin(num * 2 * np.pi / 100 - phase)) * np.cos(np.pi / 4) * 10
+    U = X + (np.sin(num * 2 * np.pi / 100 - phase)) * np.sin(phase) * 4
+    V = Y + (np.sin(num * 2 * np.pi / 100 - phase)) * np.cos(phase) * 4
 
     Q.set_UVC(U, V)
 
@@ -28,6 +28,7 @@ def update_quiver(num, Q, X, Y, phase):
 
 # you need to set blit=False, or the first set of arrows never gets
 # cleared on subsequent frames
-anim = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, 0), interval=5, blit=False)
+anim1 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, 2*np.pi/3), interval=5, blit=False)
+anim2 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, np.pi/3), interval=5, blit=False)
 fig.tight_layout()
 plt.show()
