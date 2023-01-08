@@ -3,9 +3,10 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 
 # number of phases in the system
-phase = 4
+phase = 100
 
 
+# function to define the quiver points for the number of phases
 def quiverGeneration(value):
     x_int, y_int, x_dest, y_dest = [], [], [], []
     for i in range(value):
@@ -15,13 +16,12 @@ def quiverGeneration(value):
     return x_int, y_int, x_dest, y_dest
 
 
+# get the necessary values from the function
 X, Y, U, V = quiverGeneration(phase)
 
 fig, ax = plt.subplots(1, 1)
 
 Q = ax.quiver(X, Y, U, V, pivot='tail', color=(.4, .5, .6), units='xy', scale=1)
-
-ax.set_xlim(-1, 1), ax.set_ylim(-1, 1)
 
 
 def update_quiver(num, Q, X, Y, value):
@@ -45,10 +45,10 @@ Middle_Stator = plt.Circle((0, 0), 0.5, color='k', fill=False, linestyle='--', a
 
 Central = plt.Circle((0, 0), 0.05, color='k', fill=True)
 
-# you need to set blit=False, or the first set of arrows never gets
 # cleared on subsequent frames
-ani1 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, phase), interval=1)
+anim = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, phase), interval=1)
 fig.tight_layout()
+ax.set_xlim(-1, 1), ax.set_ylim(-1, 1)
 ax.add_patch(Inner_Stator)
 ax.add_patch(Middle_Stator)
 ax.add_patch(Central)
