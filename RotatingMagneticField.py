@@ -4,17 +4,18 @@ from matplotlib import animation
 
 # X, Y = np.sin(np.arange(0, 0.01, 2*np.pi)), np.cos(np.arange(0, 0.01, 2*np.pi))
 
+phase = 2
 
 def quiverGeneration(phase):
     x_int, y_int, x_dest, y_dest = [], [], [], []
     for i in range(phase):
         x_int.append(0), y_int.append(0)
-        x_dest.append(0.125 * np.cos(np.pi/2 + i * 2 * np.pi / phase))
-        y_dest.append(0.125 * np.sin(np.pi/2 + i * 2 * np.pi / phase))
+        x_dest.append(0.125 * np.cos(i * 2 * np.pi / phase))
+        y_dest.append(0.125 * np.sin(i * 2 * np.pi / phase))
     return x_int, y_int, x_dest, y_dest
 
 
-X, Y, U, V = quiverGeneration(3)
+X, Y, U, V = quiverGeneration(phase)
 #U, V = [1*np.cos(np.pi/2), 1*np.cos(np.pi/2 + 2*np.pi/3), 1*np.cos(np.pi/2 - 2*np.pi/3)],\
 #       [1*np.sin(np.pi/2), 1*np.sin(np.pi/2 + 2*np.pi/3), 1*np.sin(np.pi/2 - 2*np.pi/3)]
 
@@ -31,10 +32,10 @@ def update_quiver(num, Q, X, Y, phase):
     """
     U, V = [], []
     for i in range(phase):
-        U.append(X[i] + (np.sin(num * 2 * np.pi / 100 - (np.pi/2 + i * 2 * np.pi / phase)) *
-                         np.sin(np.pi/2 + i * 2 * np.pi / phase)))
-        V.append(Y[i] + (np.sin(num * 2 * np.pi / 100 - (np.pi/2 + i * 2 * np.pi / phase)) *
-                         np.cos(np.pi/2 + i * 2 * np.pi / phase)))
+        U.append(X[i] + (np.sin(num * 2 * np.pi / 100 - (i * 2 * np.pi / phase)) *
+                         np.sin(i * 2 * np.pi / phase)))
+        V.append(Y[i] + (np.sin(num * 2 * np.pi / 100 - (i * 2 * np.pi / phase)) *
+                         np.cos(i * 2 * np.pi / phase)))
 
     Q.set_UVC(U, V)
 
@@ -45,7 +46,7 @@ Inner_Stator = plt.Circle((0, 0), 5, color='k', fill=False)
 
 # you need to set blit=False, or the first set of arrows never gets
 # cleared on subsequent frames
-ani1 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, 3), interval=1)
+ani1 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, phase), interval=1)
 fig.tight_layout()
 ax.add_patch(Inner_Stator)
 ax.set_box_aspect(1)
