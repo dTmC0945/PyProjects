@@ -18,7 +18,7 @@ X, Y, U, V = quiverGeneration(phase)
 
 fig, ax = plt.subplots(1, 1)
 
-Q = ax.quiver(X, Y, U, V, pivot='tail', color='r', units='xy', scale=None)
+Q = ax.quiver(X, Y, U, V, pivot='tail', color='r', units='xy', scale=1)
 
 ax.set_xlim(-1, 1), ax.set_ylim(-1, 1)
 
@@ -29,9 +29,9 @@ def update_quiver(num, Q, X, Y, phase):
     """
     U, V = [], []
     for i in range(phase):
-        U.append(X[i] + (np.sin(num * np.pi / 25 - (i * np.pi / phase)) *
+        U.append(X[i] + (np.sin(num * np.pi / 50 - (i * np.pi / phase)) *
                          np.sin(i * np.pi / phase)))
-        V.append(Y[i] + (np.sin(num * np.pi / 25 - (i * np.pi / phase)) *
+        V.append(Y[i] + (np.sin(num * np.pi / 50 - (i * np.pi / phase)) *
                          np.cos(i * np.pi / phase)))
 
 
