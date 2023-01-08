@@ -4,11 +4,12 @@ from matplotlib import animation
 
 # X, Y = np.sin(np.arange(0, 0.01, 2*np.pi)), np.cos(np.arange(0, 0.01, 2*np.pi))
 
-X, Y = 0, 0
-U, V = 1 * np.sin(np.pi / 4), 1 * np.cos(np.pi / 4)
+X, Y = [0, 0], [0, 0]
+U, V = [1 * np.sin(np.pi / 4),0], [1 * np.cos(np.pi / 4),0]
+
 fig, ax = plt.subplots(1, 1)
 
-Q = ax.quiver(X, Y, U, V, pivot='tail', color='r', units='inches')
+Q = ax.quiver(X, Y, U, V, scale = 5, pivot='tail', color='r', units='inches')
 
 ax.set_xlim(-5, 5), ax.set_ylim(-5, 5)
 
