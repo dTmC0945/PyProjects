@@ -13,7 +13,7 @@ class MainWindow(QWidget):
         super().__init__(*args, **kwargs)
 
         # set the window title
-        self.setWindowTitle('Qt Signals & Slots')
+        self.setWindowTitle('An Example Software')
 
         # create a button widget and connect its clicked signal
         # to a method
