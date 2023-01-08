@@ -24,10 +24,12 @@ def update_quiver(num, Q, X, Y, phase, amplitude):
 
     return Q
 
+circle1 = plt.Circle((0, 0), 5, color='r', fill=False)
 
 # you need to set blit=False, or the first set of arrows never gets
 # cleared on subsequent frames
 ani1 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, 0, 5), interval=1)
 ani2 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, 2*np.pi/3, 5), interval=1)
 #fig.tight_layout()
+ax.add_patch(circle1)
 plt.show()
