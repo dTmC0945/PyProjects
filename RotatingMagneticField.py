@@ -5,11 +5,11 @@ from matplotlib import animation
 # X, Y = np.sin(np.arange(0, 0.01, 2*np.pi)), np.cos(np.arange(0, 0.01, 2*np.pi))
 
 X, Y = [0, 0], [0, 0]
-U, V = [1 * np.sin(np.pi / 4),0], [1 * np.cos(np.pi / 4),0]
+U, V = [1, 1*np.sin(2*np.pi/3)], [1, 1*np.sin(2*np.pi/3)]
 
 fig, ax = plt.subplots(1, 1)
 
-Q = ax.quiver(X, Y, U, V, scale = 5, pivot='tail', color='r', units='inches')
+Q = ax.quiver(X, Y, U, V, scale=5, pivot='tail', color='r', units='inches')
 
 ax.set_xlim(-5, 5), ax.set_ylim(-5, 5)
 
@@ -18,8 +18,8 @@ def update_quiver(num, Q, X, Y, phase, amplitude):
     """updates the horizontal and vertical vector components by a
     fixed increment on each frame
     """
-    U = X + (np.sin(num * 2 * np.pi / 100 - phase)) * np.sin(phase) * amplitude
-    V = Y + (np.sin(num * 2 * np.pi / 100 - phase)) * np.cos(phase) * amplitude
+    U = X[0] + (np.sin(num * 2 * np.pi / 100 - phase)) * np.sin(phase) * amplitude
+    V = Y[0] + (np.sin(num * 2 * np.pi / 100 - phase)) * np.cos(phase) * amplitude
 
     Q.set_UVC(U, V)
 
