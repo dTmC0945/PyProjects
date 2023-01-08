@@ -17,8 +17,6 @@ def update_quiver(num,Q, X, Y, phase, Amplitude):
     """updates the horizontal and vertical vector components by a
     fixed increment on each frame
     """
-    Q1 = np.array(0)
-
     U = X + (np.sin(num * 2 * np.pi / 100 - phase)) * np.sin(phase) * Amplitude
     V = Y + (np.sin(num * 2 * np.pi / 100 - phase)) * np.cos(phase) * Amplitude
 
