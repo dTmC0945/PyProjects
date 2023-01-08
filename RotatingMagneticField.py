@@ -13,7 +13,7 @@ Q = ax.quiver(X, Y, U, V, pivot='tail', color='r', units='inches')
 ax.set_xlim(-5, 5), ax.set_ylim(-5, 5)
 
 
-def update_quiver(num, X, Y, phase, Amplitude):
+def update_quiver(num,Q, X, Y, phase, Amplitude):
     """updates the horizontal and vertical vector components by a
     fixed increment on each frame
     """
@@ -22,17 +22,16 @@ def update_quiver(num, X, Y, phase, Amplitude):
     U = X + (np.sin(num * 2 * np.pi / 100 - phase)) * np.sin(phase) * Amplitude
     V = Y + (np.sin(num * 2 * np.pi / 100 - phase)) * np.cos(phase) * Amplitude
 
-    U2 = X + (np.sin(num * 2 * np.pi / 100 - phase + 2*np.pi/3)) * np.sin(phase + 2*np.pi/3) * Amplitude
-    V2 = Y + (np.sin(num * 2 * np.pi / 100 - phase + 2*np.pi/3)) * np.cos(phase + 2*np.pi/3) * Amplitude
+    U2 = X + (np.sin(num * 2 * np.pi / 100 - (phase + 2*np.pi/3))) * np.sin(phase + 2*np.pi/3) * Amplitude
+    V2 = Y + (np.sin(num * 2 * np.pi / 100 - (phase + 2*np.pi/3))) * np.cos(phase + 2*np.pi/3) * Amplitude
 
-    Q1.set_UVC(U, V)
-    Q2.set_UVC(U2, V2)
+    Q.set_UVC(U + U2, V + V2)
 
-    return Q1, Q2
+    return Q
 
 
 # you need to set blit=False, or the first set of arrows never gets
 # cleared on subsequent frames
-anim1 = animation.FuncAnimation(fig, update_quiver, fargs=(X, Y, 2*np.pi/3, 5), interval=5, blit=False)
+anim1 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, 2*np.pi/3, 5), interval=5, blit=False)
 fig.tight_layout()
 plt.show()
