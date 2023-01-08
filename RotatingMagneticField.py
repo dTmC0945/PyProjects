@@ -32,4 +32,5 @@ ani1 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, 0, 5), interv
 ani2 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, 2*np.pi/3, 5), interval=1)
 #fig.tight_layout()
 ax.add_patch(circle1)
+ax.set_box_aspect(1)
 plt.show()
