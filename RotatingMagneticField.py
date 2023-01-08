@@ -9,12 +9,12 @@ def quiverGeneration(phase):
     x_int, y_int, x_dest, y_dest = [], [], [], []
     for i in range(phase):
         x_int.append(0), y_int.append(0)
-        x_dest.append(1 * np.cos(np.pi/2 + i * 2 * np.pi / phase))
-        y_dest.append(1 * np.sin(np.pi/2 + i * 2 * np.pi / phase))
+        x_dest.append(0.125 * np.cos(np.pi/2 + i * 2 * np.pi / phase))
+        y_dest.append(0.125 * np.sin(np.pi/2 + i * 2 * np.pi / phase))
     return x_int, y_int, x_dest, y_dest
 
 
-X, Y, U, V = quiverGeneration(2)
+X, Y, U, V = quiverGeneration(3)
 #U, V = [1*np.cos(np.pi/2), 1*np.cos(np.pi/2 + 2*np.pi/3), 1*np.cos(np.pi/2 - 2*np.pi/3)],\
 #       [1*np.sin(np.pi/2), 1*np.sin(np.pi/2 + 2*np.pi/3), 1*np.sin(np.pi/2 - 2*np.pi/3)]
 
@@ -31,8 +31,10 @@ def update_quiver(num, Q, X, Y, phase):
     """
     U, V = [], []
     for i in range(phase):
-        U.append(X[i] + (np.sin(num * 2 * np.pi / 100 - (np.pi/2 + i * 2 * np.pi / phase)) * np.sin(np.pi/2 + i * 2 * np.pi / phase)))
-        V.append(Y[i] + (np.sin(num * 2 * np.pi / 100 - (np.pi/2 + i * 2 * np.pi / phase)) * np.cos(np.pi/2 + i * 2 * np.pi / phase)))
+        U.append(X[i] + (np.sin(num * 2 * np.pi / 100 - (np.pi/2 + i * 2 * np.pi / phase)) *
+                         np.sin(np.pi/2 + i * 2 * np.pi / phase)))
+        V.append(Y[i] + (np.sin(num * 2 * np.pi / 100 - (np.pi/2 + i * 2 * np.pi / phase)) *
+                         np.cos(np.pi/2 + i * 2 * np.pi / phase)))
 
     Q.set_UVC(U, V)
 
