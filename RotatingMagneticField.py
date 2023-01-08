@@ -4,28 +4,35 @@ from matplotlib import animation
 
 # X, Y = np.sin(np.arange(0, 0.01, 2*np.pi)), np.cos(np.arange(0, 0.01, 2*np.pi))
 
-X, Y = [0, 0, 0], [0, 0, 0]
-U, V = [1*np.cos(np.pi/2), 1*np.cos(np.pi/2 + 2*np.pi/3), 1*np.cos(np.pi/2 - 2*np.pi/3)],\
-       [1*np.sin(np.pi/2), 1*np.sin(np.pi/2 + 2*np.pi/3), 1*np.sin(np.pi/2 - 2*np.pi/3)]
+
+def quiverGeneration(phase):
+    x_int, y_int, x_dest, y_dest = [], [], [], []
+    for i in range(phase):
+        x_int.append(0), y_int.append(0)
+        x_dest.append(1 * np.cos(np.pi/2 + i * 2 * np.pi / phase))
+        y_dest.append(1 * np.sin(np.pi/2 + i * 2 * np.pi / phase))
+    return x_int, y_int, x_dest, y_dest
+
+
+X, Y, U, V = quiverGeneration(2)
+#U, V = [1*np.cos(np.pi/2), 1*np.cos(np.pi/2 + 2*np.pi/3), 1*np.cos(np.pi/2 - 2*np.pi/3)],\
+#       [1*np.sin(np.pi/2), 1*np.sin(np.pi/2 + 2*np.pi/3), 1*np.sin(np.pi/2 - 2*np.pi/3)]
 
 fig, ax = plt.subplots(1, 1)
 
-Q = ax.quiver(X, Y, U, V, pivot='tail', color='r', units='inches')
+Q = ax.quiver(X, Y, U, V, pivot='tail', color='r', units='inches',scale=None)
 
 ax.set_xlim(-5, 5), ax.set_ylim(-5, 5)
 
 
-def update_quiver(num, Q, X, Y):
+def update_quiver(num, Q, X, Y, phase):
     """updates the horizontal and vertical vector components by a
     fixed increment on each frame
     """
-    U = [X[0] + (np.sin(num * 2 * np.pi / 100 - np.pi/2)) * np.sin(np.pi/2),
-         X[1] + (np.sin(num * 2 * np.pi / 100 - np.pi/2 - 2 * np.pi/3)) * np.sin(np.pi/2 + 2 * np.pi/3),
-         X[2] + (np.sin(num * 2 * np.pi / 100 - np.pi/2 + 2 * np.pi/3)) * np.sin(np.pi/2 - 2 * np.pi/3)]
-
-    V = [Y[0] + (np.sin(num * 2 * np.pi / 100 - np.pi/2)) * np.cos(np.pi/2),
-         Y[1] + (np.sin(num * 2 * np.pi / 100 - np.pi/2 - 2 * np.pi/3)) * np.cos(np.pi/2 + 2 * np.pi/3),
-         Y[2] + (np.sin(num * 2 * np.pi / 100 - np.pi/2 + 2 * np.pi/3)) * np.cos(np.pi/2 - 2 * np.pi/3)]
+    U, V = [], []
+    for i in range(phase):
+        U.append(X[i] + (np.sin(num * 2 * np.pi / 100 - (np.pi/2 + i * 2 * np.pi / phase)) * np.sin(np.pi/2 + i * 2 * np.pi / phase)))
+        V.append(Y[i] + (np.sin(num * 2 * np.pi / 100 - (np.pi/2 + i * 2 * np.pi / phase)) * np.cos(np.pi/2 + i * 2 * np.pi / phase)))
 
     Q.set_UVC(U, V)
 
@@ -36,7 +43,7 @@ Inner_Stator = plt.Circle((0, 0), 5, color='k', fill=False)
 
 # you need to set blit=False, or the first set of arrows never gets
 # cleared on subsequent frames
-ani1 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y), interval=1)
+ani1 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, 3), interval=1)
 fig.tight_layout()
 ax.add_patch(Inner_Stator)
 ax.set_box_aspect(1)
