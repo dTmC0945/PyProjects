@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 
 # number of phases in the system
-phase = 17
+phase = 3
 
 
 # function to define the quiver points for the number of phases
@@ -40,17 +40,12 @@ def update_quiver(num, Q, X, Y, value):
     return Q
 
 
-Inner_Stator = plt.Circle((0, 0), 1, color='k', fill=False)
-Middle_Stator = plt.Circle((0, 0), 0.5, color='k', fill=False, linestyle='--', alpha=0.25)
-
 Central = plt.Circle((0, 0), 0.05, color='k', fill=True)
 
 # cleared on subsequent frames
 anim = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, phase), interval=1)
 fig.tight_layout()
 ax.set_xlim(-1, 1), ax.set_ylim(-1, 1)
-ax.add_patch(Inner_Stator)
-ax.add_patch(Middle_Stator)
 ax.add_patch(Central)
 ax.set_box_aspect(1)
 plt.show()
