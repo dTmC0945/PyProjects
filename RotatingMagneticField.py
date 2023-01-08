@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 
 # number of phases in the system
-phase = 100
+phase = 6
 
 
 # function to define the quiver points for the number of phases
