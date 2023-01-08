@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 
 # number of phases in the system
-phase = 6
+phase = 17
 
 
 # function to define the quiver points for the number of phases
@@ -21,7 +21,7 @@ X, Y, U, V = quiverGeneration(phase)
 
 fig, ax = plt.subplots(1, 1)
 
-Q = ax.quiver(X, Y, U, V, pivot='tail', color=(.4, .5, .6), units='xy', scale=1)
+Q = ax.quiver(X, Y, U, V, pivot='tail', color=(.5, .5, .5), units='xy', scale=1)
 
 
 def update_quiver(num, Q, X, Y, value):
