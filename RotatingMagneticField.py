@@ -41,13 +41,16 @@ def update_quiver(num, Q, X, Y, phase):
 
 
 Inner_Stator = plt.Circle((0, 0), 1, color='k', fill=False)
-Central = plt.Circle((0, 0), 0.01, color='k', fill=True)
+Middle_Stator = plt.Circle((0, 0), 0.5, color='k', fill=False, linestyle='--', alpha =0.25)
+
+Central = plt.Circle((0, 0), 0.05, color='k', fill=True)
 
 # you need to set blit=False, or the first set of arrows never gets
 # cleared on subsequent frames
-ani1 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, phase), interval=1)
+ani1 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, phase), interval=10)
 fig.tight_layout()
 ax.add_patch(Inner_Stator)
+ax.add_patch(Middle_Stator)
 ax.add_patch(Central)
 ax.set_box_aspect(1)
 plt.show()
