@@ -11,7 +11,6 @@ U, V = [1*np.cos(np.pi/2), 1*np.cos(np.pi/2 + 2*np.pi/3), 1*np.cos(np.pi/2 - 2*n
 fig, ax = plt.subplots(1, 1)
 
 Q = ax.quiver(X, Y, U, V, scale=1, pivot='tail', color='r', units='inches')
-plt.show()
 
 ax.set_xlim(-5, 5), ax.set_ylim(-5, 5)
 
@@ -35,6 +34,6 @@ Inner_Stator = plt.Circle((0, 0), 5, color='k', fill=False)
 #ani1 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, 0, 5), interval=1)
 #ani2 = animation.FuncAnimation(fig, update_quiver, fargs=(Q, X, Y, 2*np.pi/3, 5), interval=1)
 #fig.tight_layout()
-#ax.add_patch(Inner_Stator)
-#ax.set_box_aspect(1)
-#plt.show()
+ax.add_patch(Inner_Stator)
+ax.set_box_aspect(1)
+plt.show()
