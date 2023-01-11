@@ -10,7 +10,7 @@ ax = plt.axes(xlim=(0, 10), ylim=(0, 10))
 patch = plt.Circle((5, -5), 0.75, fc='y')
 
 def init():
-    patch.center = (5, 5)
+    patch.center = (0, 0)
     ax.add_patch(patch)
     return patch,
 
