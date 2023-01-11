@@ -30,14 +30,14 @@ def update_quiver(num, Q, X, Y, value):
     """updates the horizontal and vertical vector components by a
     fixed increment on each frame"""
 
-    U, V = [], []
+    u, v = [], []
     for i in range(value):
-        U.append(X[i] + (np.sin(num * np.pi / 50 - (i * np.pi / value)) *
+        u.append(X[i] + (np.sin(num * np.pi / 50 - (i * np.pi / value)) *
                          np.sin(i * np.pi / value)))
-        V.append(Y[i] + (np.sin(num * np.pi / 50 - (i * np.pi / value)) *
+        v.append(Y[i] + (np.sin(num * np.pi / 50 - (i * np.pi / value)) *
                          np.cos(i * np.pi / value)))
 
-    Q.set_UVC(U, V)
+    Q.set_UVC(u, v)
 
     return Q
 
