@@ -21,13 +21,15 @@ X, Y, U, V = quiverGeneration(phase)
 
 fig, ax = plt.subplots(1, 1)
 
+# Assign the quiver function
 Q = ax.quiver(X, Y, U, V, pivot='tail', color=(.5, .5, .5), units='xy', scale=1)
 
 
+# define the quiver animation
 def update_quiver(num, Q, X, Y, value):
     """updates the horizontal and vertical vector components by a
-    fixed increment on each frame
-    """
+    fixed increment on each frame"""
+
     U, V = [], []
     for i in range(value):
         U.append(X[i] + (np.sin(num * np.pi / 50 - (i * np.pi / value)) *
