@@ -6,7 +6,7 @@ fig = plt.figure()
 fig.set_dpi(100)
 fig.set_size_inches(7, 6.5)
 
-ax = plt.axes(xlim=(0, 10), ylim=(0, 10))
+ax = plt.axes(xlim=(-5, 5), ylim=(-5, 5))
 patch = plt.Circle((5, -5), 0.75, fc='y')
 
 def init():
@@ -16,15 +16,15 @@ def init():
 
 def animate(i):
     x, y = patch.center
-    x = 5 + 3 * np.sin(np.radians(i))
-    y = 5 + 3 * np.cos(np.radians(i))
+    x = 0 + 3 * np.sin(np.radians(i))
+    y = 0 + 3 * np.cos(np.radians(i))
     patch.center = (x, y)
     return patch,
 
 anim = animation.FuncAnimation(fig, animate,
                                init_func=init,
                                frames=360,
-                               interval=20,
+                               interval=2,
                                blit=True)
 
 plt.show()
