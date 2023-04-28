@@ -4,8 +4,9 @@ It will also be responsible for determining the valid moves of the current state
 """
 
 
-class GameState:
-    def __int__(self):
+class GameState(object):
+    def __init__(self):
+        self.hello = "G"
         # Board is an 8 by 8 2D list, with each element of the list has 2 characters.
         # The first character represents the color of the piece "b" or "w".
         # The second character represents the type of the piece, "K", "Q", "R", "B", "N" or "P".
