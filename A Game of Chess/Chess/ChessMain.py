@@ -19,12 +19,14 @@ Initialise a global dictionary of images. This will be called exactly once in th
 def loadImages():
     pieces = ["wp", "wR", "wN", "wB", "wK", "wQ", "bR", "bN", "bB", "bK", "bQ"]
     for piece in pieces:
-        IMAGES[piece] = p.transform.scale(p.image.load("images/" + piece + ".png"),(SQ_SIZE, SQ_SIZE))
+        IMAGES[piece] = p.transform.scale(p.image.load("images/" + piece + ".png"), (SQ_SIZE, SQ_SIZE))
     # NOTE: can access an image by saying "IMAGES["wp"]
+
 
 """
 This is the main driver of the code. This will handle the user input and updating the graphics.
 """
+
 
 def main():
     p.init()
@@ -33,16 +35,43 @@ def main():
     screen.fill(p.Color("white"))
     gs = ChessEngine.GameState()
     print(gs.board)
-    loadImages() # Only do this once. before the while loop
+    loadImages()  # Only do this once. before the while loop
     running = True
 
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
-
+        drawGameState(screen, gs)
         clock.tick(MAX_FPS)
         p.display.flip()
+
+
+"""
+Responsible for all the graphics within the current game state.
+"""
+
+
+def drawGameState(screen, gs):
+    drawBoard(screen)  # Draws the squares on the boards
+    drawPieces(screen, gs.board)  # Draws pieces on top of the squares
+
+
+"""
+Draw the squares on the board. The top left square is always light.
+"""
+
+
+def drawBoard(screen):
+
+
+"""
+Draw the pieces on the board using the current GameState.board()
+"""
+
+
+def drawPieces(screen, board):
+
 
 if __name__ == "__main__":
     main()
