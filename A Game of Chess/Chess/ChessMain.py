@@ -37,11 +37,17 @@ def main():
     print(gs.board)
     loadImages()  # Only do this once. before the while loop
     running = True
-
+    sqSelected = () # no square is selected initially, keeps track of the last click of the user (tuple: (row, col))
+    playerClicks = [] # keep track of the player clicks (two tuples: [
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
+            elif e.type == p.MOUSEBUTTONDOWN:
+                location = p.mouse.get_pos() # gets the x, y location of the mouse
+                col = location[0] // SQ_SIZE
+                row = location[1] // SQ_SIZE
+                sqSelected = (row, col)
         drawGameState(screen, gs)
         clock.tick(MAX_FPS)
         p.display.flip()
